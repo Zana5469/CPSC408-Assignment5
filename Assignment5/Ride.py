@@ -119,7 +119,7 @@ def Driver(driver_id):
 
         driver_choice = helper.get_choice([1, 2, 3, 4])
 
-        # Option 1: View Rating
+        # View Rating
         if driver_choice == 1:
 
             rating = db_ops.get_driver_rating(driver_id)
@@ -128,7 +128,7 @@ def Driver(driver_id):
             else:
                 print(f"Your average rating is: {rating:.2f}/5")
 
-        # Option 2: View Rides
+        # View Rides
         elif driver_choice == 2:
             rides = db_ops.get_driver_rides(driver_id)
             if not rides:
@@ -144,7 +144,7 @@ def Driver(driver_id):
                     print(f"Rating: {ride[4]}")
                     print(f"Date: {ride[5]}")
 
-        # Option 3: Edit Driver  Mode
+        # Edit Driver  Mode
         elif driver_choice == 3:
 
             print("\n1. Activate Driver Mode")
@@ -158,7 +158,7 @@ def Driver(driver_id):
                 db_ops.update_driver_mode(driver_id, 0)
                 print("Driver mode deactivated!")
 
-        # Option 4: Logout
+        #Logout
         elif driver_choice == 4:
             print("Logging out...")
             return
@@ -175,7 +175,7 @@ def Rider(rider_id):
 
         rider_choice = helper.get_choice([1, 2, 3, 4])
 
-        # Option 1: View Rides
+        # View Rides
         if rider_choice == 1:
             rides = db_ops.get_rider_rides(rider_id)
             if not rides:
@@ -191,15 +191,15 @@ def Rider(rider_id):
                     print(f"Rating: {ride[4]}")
                     print(f"Date: {ride[5]}")
 
-        # Option 2: Find a Driver
+        # Find a Driver
         elif rider_choice == 2:
             Find_Driver(rider_id)
 
-        # Option 3: Rate My Driver
+        # Rate My Driver
         elif rider_choice == 3:
             Rate_Driver(rider_id)
 
-        # Option 4: Logout
+        # Logout
         elif rider_choice == 4:
             print("Logging out...")
             return
