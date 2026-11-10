@@ -73,7 +73,7 @@ class db_operations():
             RideID INT AUTO_INCREMENT PRIMARY KEY,
             DriverID INT NOT NULL,
             RiderID INT NOT NULL,
-            Rating INT NULL,
+            Rating FLOAT NULL,
             Origin VARCHAR(100) NOT NULL,
             Destination VARCHAR(100) NOT NULL,
             RideDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -89,7 +89,6 @@ class db_operations():
 
         print("Rideshare tables created successfully!")
 
-    # Create a new driver account
     def create_driver(self, username, password):
 
         query = '''
