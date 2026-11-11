@@ -26,6 +26,7 @@ def StartScreen():
             print("Thank you for using RideShare!")
             exit()
 
+#Function to create a new account for either a driver or a rider
 def CreateAccount():
 
     print("1. Driver")
@@ -36,13 +37,13 @@ def CreateAccount():
     username = input("Create a username: ").strip()
     password = input("Create a password: ").strip()
 
-    # Validate username and password
+    # Validate username and password and ensure they are not empty nor are already taken
     if not username or not password:
         print("Username and password cannot be empty.")
         return
 
     try:
-
+        #driver account creation
         if account_type == 1:
 
             driver_id = db_ops.create_driver(username, password)
@@ -50,6 +51,7 @@ def CreateAccount():
             print("\nDriver account successfully created!")
             print(f"Your Driver ID is: {driver_id}")
 
+        #rider account creation
         elif account_type == 2:
 
             rider_id = db_ops.create_rider(username, password)
@@ -60,12 +62,13 @@ def CreateAccount():
         print("\nPlease log in to your new account.")
         Login()
 
+    #throw an exception if the account creation fails, likely due to a duplicate username. This should not print! 
     except Exception as e:
 
         print("Unable to create account.")
         print("The username may already exist.")
-        print("Error:", e)
 
+#Function to handle user login for either a driver or a rider with an already existing account. 
 def Login():
 
     print("\nLogin to Your Account:")
@@ -77,6 +80,7 @@ def Login():
     username = input("Enter your username: ").strip()
     password = input("Enter your password: ").strip()
 
+    # Ensures that username and password are not empty. 
     if not username or not password:
         print("Username and password cannot be empty.")
         return
@@ -85,9 +89,9 @@ def Login():
 
         # Driver Login
         if account_type == 1:
-            user = db_ops.get_driver_login(username, password)
-            if user:
-                driver_id = user[0][0]
+            user = db_ops.get_driver_login(username, password) # checks if the driver exists in the database
+            if user:                                            # if the driver exists, it retrieves the driver ID and welcomes the user back
+                driver_id = user[0][0] 
                 print(f"\nWelcome back, {username}!")
                 Driver(driver_id)
             else:
@@ -95,7 +99,7 @@ def Login():
 
         # Rider Login
         elif account_type == 2:
-            user = db_ops.get_rider_login(username, password)
+            user = db_ops.get_rider_login(username, password)   #if the rider exists, it retrieves the rider ID and welcomes the user back
             if user:
                 rider_id = user[0][0]
                 print(f"\nWelcome back, {username}!")
@@ -104,9 +108,10 @@ def Login():
                 print("Invalid username or password.")
 
     except Exception as e:
-        print("Unable to log in.")
+        print("Unable to log in.")                              #throws an exception if the login fails, likely due to incorrect credentials. 
 
 
+#Function for options that will print when driver logs in. 
 def Driver(driver_id):
 
     while True:
@@ -124,7 +129,7 @@ def Driver(driver_id):
 
             rating = db_ops.get_driver_rating(driver_id)
             if rating is None:
-                print("You do not have any ratings yet.")
+                print("You do not have any ratings yet.") #error handlings for if the driver has not received any ratings yet.
             else:
                 print(f"Your average rating is: {rating:.2f}/5")
 
@@ -143,6 +148,7 @@ def Driver(driver_id):
                     print(f"Destination: {ride[3]}")
                     print(f"Rating: {ride[4]}")
                     print(f"Date: {ride[5]}")
+                    print("-----------------------------")
 
         # Edit Driver  Mode
         elif driver_choice == 3:
@@ -162,7 +168,8 @@ def Driver(driver_id):
         elif driver_choice == 4:
             print("Logging out...")
             return
-        
+
+#Function for options that will print when rider logs in.     
 def Rider(rider_id):
 
     while True:
@@ -190,7 +197,7 @@ def Rider(rider_id):
                     print(f"Destination: {ride[3]}")
                     print(f"Rating: {ride[4]}")
                     print(f"Date: {ride[5]}")
-
+                    print("-----------------------------")
         # Find a Driver
         elif rider_choice == 2:
             Find_Driver(rider_id)
@@ -204,7 +211,7 @@ def Rider(rider_id):
             print("Logging out...")
             return
 
-
+#Function the rider can use to find a driver. 
 def Find_Driver(rider_id):
 
     print("\nFIND A DRIVER")
@@ -241,6 +248,8 @@ def Find_Driver(rider_id):
     print(f"Pickup: {origin}")
     print(f"Destination: {destination}")
 
+     #input must be y/n to confirm the ride. If the input is not y/n, 
+     #it will print "Ride request cancelled." and return to the previous menu.
     confirm = input("\nConfirm this ride? (y/n): ").strip().lower()
 
     if confirm != "y":
@@ -261,11 +270,10 @@ def Find_Driver(rider_id):
         print("Your ride has been successfully created!")
 
     except Exception as e:
-
         print("Unable to create ride.")
 
 
-
+#Function for the rider to rate their driver after a ride.
 def Rate_Driver(rider_id):
     print("\nDRIVER RATING")
 
